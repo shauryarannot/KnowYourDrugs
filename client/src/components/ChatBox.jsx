@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, Sparkles } from "lucide-react";
+import { Send, Sparkles, Moon, Sun, Pill, Heart, Shield } from "lucide-react";
 
 const ChatBox = () => {
   const [messages, setMessages] = useState([
@@ -13,15 +13,28 @@ const ChatBox = () => {
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [isDark, setIsDark] = useState(false);
   const messagesEndRef = useRef(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  useEffect(() => {
+    const storedMode = localStorage.getItem("theme");
+    const prefersDark =
+      storedMode === "dark" ||
+      (!storedMode && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    setIsDark(prefersDark);
+    document.documentElement.classList.toggle("dark", prefersDark);
+  }, []);
 
   useEffect(() => {
-    scrollToBottom();
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  const toggleTheme = () => {
+    const newTheme = !isDark;
+    setIsDark(newTheme);
+    document.documentElement.classList.toggle("dark", newTheme);
+    localStorage.setItem("theme", newTheme ? "dark" : "light");
+  };
 
   const handleSendMessage = () => {
     if (!inputValue.trim()) return;
@@ -33,7 +46,7 @@ const ChatBox = () => {
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
     };
 
-    setMessages((prev) => [...prev, newMessage]);
+    setMessages(prev => [...prev, newMessage]);
     setInputValue("");
     setIsTyping(true);
 
@@ -41,8 +54,8 @@ const ChatBox = () => {
       const responses = [
         "Could you please be more specific about what you'd like to know?",
         "Let me provide some educational information about that topic.",
-        "I’d recommend consulting with a healthcare professional.",
-        "Here’s some general information that might help."
+        "I'd recommend consulting with a healthcare professional.",
+        "Here's some general information that might help."
       ];
 
       const aiResponse = {
@@ -52,79 +65,125 @@ const ChatBox = () => {
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
       };
 
-      setMessages((prev) => [...prev, aiResponse]);
+      setMessages(prev => [...prev, aiResponse]);
       setIsTyping(false);
     }, 1500);
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleSendMessage();
-    }
+    if (e.key === "Enter") handleSendMessage();
   };
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto px-4 py-6 animate-fade-in">
-      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-indigo-100 via-white to-purple-100 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 blur-2xl opacity-30 rounded-3xl" />
-
-      <div className="rounded-3xl shadow-2xl border border-white/20 bg-white/80 dark:bg-gray-900/80 dark:border-gray-700 backdrop-blur-xl overflow-hidden">
-        <div className="h-[460px] sm:h-[500px] overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-gray-100/60 to-white/40 dark:from-gray-800/60 dark:to-gray-900/40 scrollbar-thin">
-          {messages.map((msg) => (
-            <div
-              key={msg.id}
-              className={`flex ${msg.isUser ? "justify-end" : "justify-start"} animate-fade-in`}
-            >
-              <div
-                className={`px-5 py-4 max-w-[75%] text-sm shadow-lg rounded-2xl ${
-                  msg.isUser
-                    ? "bg-gradient-to-br from-indigo-500 to-purple-500 text-white"
-                    : "bg-white/90 dark:bg-gray-800 border border-gray-100/40 dark:border-gray-700 backdrop-blur-md text-gray-800 dark:text-gray-100"
-                }`}
-              >
-                <p>{msg.content}</p>
-                <div className="text-[10px] text-right text-gray-400 dark:text-gray-500 mt-1">{msg.timestamp}</div>
+    <div className="min-h-screen bg-white dark:bg-black p-4 transition-all duration-700">
+      <div className="relative w-full max-w-4xl mx-auto">
+        <div className="relative border border-white/20 dark:border-gray-700/50 rounded-3xl bg-white dark:bg-gray-900 shadow-xl backdrop-blur-2xl">
+          <div className="flex items-center justify-between p-4 border-b border-white/20 dark:border-gray-700/50">
+            <div className="flex items-center gap-3">
+              <div className="flex gap-1.5">
+                <div className="w-3 h-3 bg-red-400 rounded-full animate-pulse"></div>
+                <div className="w-3 h-3 bg-yellow-400 rounded-full animate-pulse" style={{ animationDelay: "0.5s" }}></div>
+                <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse" style={{ animationDelay: "1s" }}></div>
+              </div>
+              <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Medical Chat Session
               </div>
             </div>
-          ))}
-
-          {isTyping && (
-            <div className="flex justify-start animate-fade-in">
-              <div className="px-5 py-4 mr-4 border rounded-2xl shadow-lg bg-white/90 dark:bg-gray-800 border-gray-100/50 dark:border-gray-700 backdrop-blur-sm">
-                <div className="flex space-x-2">
-                  {[0, 0.1, 0.2].map((d, i) => (
-                    <div
-                      key={i}
-                      className="w-2.5 h-2.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full animate-bounce"
-                      style={{ animationDelay: `${d}s` }}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
-
-        <div className="p-4 border-t border-gray-100/50 dark:border-gray-700 bg-white/80 dark:bg-gray-900 backdrop-blur-md">
-          <div className="flex gap-2">
-            <input
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Ask about a medication..."
-              className="flex-1 px-5 py-3 text-sm bg-white/80 dark:bg-gray-800 border border-gray-300/50 dark:border-gray-700 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 transition text-gray-900 dark:text-gray-100"
-            />
             <button
-              onClick={handleSendMessage}
-              disabled={!inputValue.trim() || isTyping}
-              className="px-5 py-3 flex items-center justify-center bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white rounded-2xl shadow-lg hover:scale-105 transition active:scale-100 disabled:opacity-50"
+              onClick={toggleTheme}
+              className="p-2 rounded-xl bg-white/60 dark:bg-gray-800/60 border border-white/30 dark:border-gray-700/50 hover:bg-white/80 dark:hover:bg-gray-700/60 transition-all duration-300 hover:scale-110 group"
             >
-              <Send className="w-5 h-5" />
+              {isDark ? (
+                <Sun className="w-4 h-4 text-yellow-500 group-hover:rotate-180 transition-transform duration-500" />
+              ) : (
+                <Moon className="w-4 h-4 text-indigo-600 group-hover:-rotate-12 transition-transform duration-300" />
+              )}
             </button>
           </div>
-          <p className="mt-3 text-xs text-center text-gray-500 dark:text-gray-400 font-medium">
-            Educational use only. Always consult a healthcare provider.
-          </p>
+
+          <div className="h-[460px] sm:h-[500px] overflow-y-auto p-6 space-y-6">
+            {messages.map((msg) => (
+              <div key={msg.id} className={`flex ${msg.isUser ? "justify-end" : "justify-start"}`}>
+                <div className={`group relative ${msg.isUser ? "max-w-[75%]" : "max-w-[85%]"}`}>
+                  {!msg.isUser && (
+                    <div className="flex items-center gap-2 mb-2 ml-2">
+                      <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <Sparkles className="w-3 h-3 text-white" />
+                      </div>
+                      <span className="text-xs font-medium text-gray-600 dark:text-gray-400">MedBot</span>
+                    </div>
+                  )}
+                  <div
+                    className={`px-6 py-4 text-sm shadow-xl rounded-2xl backdrop-blur-sm transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] ${
+                      msg.isUser
+                        ? "bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 text-white"
+                        : "bg-white dark:bg-gray-800 border border-white/50 dark:border-gray-700/50 text-gray-800 dark:text-gray-100"
+                    }`}
+                  >
+                    <p className="leading-relaxed">{msg.content}</p>
+                    <div className={`text-[10px] text-right mt-2 ${msg.isUser ? "text-blue-100" : "text-gray-400 dark:text-gray-500"}`}>
+                      {msg.timestamp}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {isTyping && (
+              <div className="flex justify-start">
+                <div className="group relative max-w-[85%]">
+                  <div className="flex items-center gap-2 mb-2 ml-2">
+                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center animate-pulse">
+                      <Sparkles className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="text-xs font-medium text-gray-600 dark:text-gray-400">MedBot is typing...</span>
+                  </div>
+                  <div className="px-6 py-4 bg-white dark:bg-gray-800 border border-white/50 dark:border-gray-700/50 rounded-2xl shadow-xl backdrop-blur-sm">
+                    <div className="flex space-x-2">
+                      {[0, 0.2, 0.4].map((delay, i) => (
+                        <div
+                          key={i}
+                          className="w-2.5 h-2.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full animate-bounce"
+                          style={{ animationDelay: `${delay}s` }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          <div className="p-6 border-t border-white/20 dark:border-gray-700/50">
+            <div className="flex gap-3">
+              <div className="flex-1 relative">
+                <input
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Ask about a medication..."
+                  className="w-full px-6 py-4 text-sm bg-white dark:bg-gray-800 border border-white/50 dark:border-gray-700/50 rounded-2xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
+                />
+                <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                  <Pill className="w-4 h-4" />
+                </div>
+              </div>
+              <button
+                onClick={handleSendMessage}
+                disabled={!inputValue.trim() || isTyping}
+                className="px-6 py-4 flex items-center justify-center bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-700 text-white rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 disabled:opacity-50"
+              >
+                <Send className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="mt-4 flex items-center justify-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+              <Shield className="w-3 h-3" />
+              <span className="font-medium">Educational use only. Always consult a healthcare provider.</span>
+              <Heart className="w-3 h-3 text-red-400" />
+            </div>
+          </div>
         </div>
       </div>
     </div>
