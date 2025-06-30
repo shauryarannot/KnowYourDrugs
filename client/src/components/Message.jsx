@@ -1,9 +1,13 @@
 const Message = ({ content, isUser, timestamp }) => {
   const containerClass = isUser ? "justify-end" : "justify-start";
+
   const bubbleClass = isUser
     ? "bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white ml-4 shadow-indigo-500/25"
-    : "bg-white/80 backdrop-blur-sm text-gray-800 mr-4 border border-gray-100/50 shadow-gray-500/10";
-  const timestampClass = isUser ? "text-indigo-100" : "text-gray-500";
+    : "bg-white/80 dark:bg-gray-800 text-gray-800 dark:text-gray-100 border border-gray-100/50 dark:border-gray-700 backdrop-blur-sm shadow-gray-500/10 mr-4";
+
+  const timestampClass = isUser
+    ? "text-indigo-100"
+    : "text-gray-500 dark:text-gray-400";
 
   return (
     <div className={`flex w-full animate-fade-in ${containerClass}`}>
