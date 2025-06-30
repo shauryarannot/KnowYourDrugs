@@ -1,8 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import { Send, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import Message from "./Message";
 
 const ChatBox = () => {
   const [messages, setMessages] = useState([
@@ -42,10 +39,10 @@ const ChatBox = () => {
 
     setTimeout(() => {
       const responses = [
-        "I understand you're looking for information about that medication. Could you please be more specific about what you'd like to know?",
-        "That's a great question! Let me provide you with some educational information about that topic.",
-        "For safety reasons, I'd recommend consulting with a healthcare professional for personalized advice about medications.",
-        "Here's some general information that might be helpful. Remember, this is for educational purposes only."
+        "Could you please be more specific about what you'd like to know?",
+        "Let me provide some educational information about that topic.",
+        "I’d recommend consulting with a healthcare professional.",
+        "Here’s some general information that might help."
       ];
 
       const aiResponse = {
@@ -67,16 +64,14 @@ const ChatBox = () => {
   };
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto animate-fade-in">
-      {/* Background Glow */}
-      <div className="absolute inset-0 -z-10 rounded-3xl bg-gradient-to-br from-indigo-100 via-white to-purple-100 opacity-30 blur-2xl" />
+    <div className="relative w-full max-w-4xl mx-auto px-4 py-6 animate-fade-in">
+      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-indigo-100 via-white to-purple-100 blur-2xl opacity-30 rounded-3xl" />
 
-      <div className="relative rounded-3xl bg-white/80 backdrop-blur-2xl shadow-2xl border border-white/30">
-        {/* Chat Header */}
-        <div className="p-6 text-white bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-t-3xl">
+      <div className="rounded-3xl shadow-2xl border border-white/20 bg-white/80 backdrop-blur-xl overflow-hidden">
+        <div className="p-6 text-white bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-t-3xl text-center">
           <div className="flex items-center justify-center space-x-3">
             <Sparkles className="h-6 w-6 text-white/90" />
-            <div className="text-center">
+            <div>
               <h2 className="text-xl font-bold">Drug Info Assistant</h2>
               <p className="text-xs sm:text-sm text-white/80">Ask about any medicine, side effects, or interactions</p>
             </div>
@@ -84,10 +79,23 @@ const ChatBox = () => {
           </div>
         </div>
 
-        {/* Messages */}
-        <div className="h-[460px] sm:h-[500px] overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-gray-50/50 to-white/50 scrollbar-thin">
-          {messages.map((message) => (
-            <Message key={message.id} {...message} />
+        <div className="h-[460px] sm:h-[500px] overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-gray-100/60 to-white/40 scrollbar-thin">
+          {messages.map((msg) => (
+            <div
+              key={msg.id}
+              className={`flex ${msg.isUser ? "justify-end" : "justify-start"} animate-fade-in`}
+            >
+              <div
+                className={`px-5 py-4 max-w-[75%] text-sm shadow-lg rounded-2xl ${
+                  msg.isUser
+                    ? "bg-gradient-to-br from-indigo-500 to-purple-500 text-white"
+                    : "bg-white/90 border border-gray-100/40 backdrop-blur-md"
+                }`}
+              >
+                <p>{msg.content}</p>
+                <div className="text-[10px] text-right text-gray-400 mt-1">{msg.timestamp}</div>
+              </div>
+            </div>
           ))}
 
           {isTyping && (
@@ -108,25 +116,22 @@ const ChatBox = () => {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input */}
-        <div className="p-6 border-t border-gray-100/50 bg-white/90 backdrop-blur-sm">
-          <div className="flex space-x-4">
-            <div className="flex-1">
-              <Input
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Ask about a medication..."
-                className="w-full px-6 py-4 text-sm bg-white/80 backdrop-blur-sm border-gray-200/50 rounded-2xl shadow-sm focus:border-indigo-400 focus:ring-indigo-300/50 transition duration-300"
-              />
-            </div>
-            <Button
+        <div className="p-4 border-t bg-white/80 backdrop-blur-md">
+          <div className="flex gap-2">
+            <input
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Ask about a medication..."
+              className="flex-1 px-5 py-3 text-sm bg-white/80 border border-gray-300/50 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            />
+            <button
               onClick={handleSendMessage}
               disabled={!inputValue.trim() || isTyping}
-              className="rounded-2xl px-8 py-4 text-white bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 shadow-lg shadow-indigo-500/25 hover:scale-105 transition disabled:opacity-50"
+              className="px-5 py-3 flex items-center justify-center bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white rounded-2xl shadow-lg hover:scale-105 transition active:scale-100 disabled:opacity-50"
             >
-              <Send className="h-5 w-5" />
-            </Button>
+              <Send className="w-5 h-5" />
+            </button>
           </div>
           <p className="mt-3 text-xs text-center text-gray-500 font-medium">
             Educational use only. Always consult a healthcare provider.
