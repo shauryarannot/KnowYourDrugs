@@ -1,175 +1,255 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Minimalistic design system for KnowYourDrugs - Pure black/white theme */
-
 @layer base {
   :root {
-    /* Pure minimalistic palette */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
-    
-    /* Subtle grays for depth */
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 40%;
-    
-    /* Card system */
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 0%;
-    
-    /* Input and borders */
-    --border: 0 0% 90%;
-    --input: 0 0% 96%;
-    --ring: 0 0% 0%;
-    
-    /* Interactive elements */
-    --primary: 0 0% 0%;
+    /* Enhanced neutral base with warmer undertones */
+    --background: 220 20% 99%;
+    --foreground: 220 15% 9%;
+
+    /* Softer muted tones */
+    --muted: 220 15% 96%;
+    --muted-foreground: 220 10% 46%;
+
+    /* Clean card backgrounds */
+    --card: 220 20% 99%;
+    --card-foreground: 220 15% 9%;
+
+    /* Subtle borders and inputs */
+    --border: 220 20% 90%;
+    --input: 220 15% 97%;
+    --ring: 220 100% 65%;
+
+    /* Refined primary - softer blue */
+    --primary: 220 70% 55%;
     --primary-foreground: 0 0% 100%;
-    
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 0%;
-    
-    --accent: 0 0% 94%;
-    --accent-foreground: 0 0% 0%;
-    
-    /* Status colors */
-    --destructive: 0 65% 50%;
+
+    /* Minimalistic secondary */
+    --secondary: 220 15% 96%;
+    --secondary-foreground: 220 15% 15%;
+
+    /* Gentle accent */
+    --accent: 220 50% 98%;
+    --accent-foreground: 220 50% 25%;
+
+    /* Softer destructive */
+    --destructive: 0 70% 55%;
     --destructive-foreground: 0 0% 100%;
-    
-    /* Popovers */
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 0%;
-    
+
+    /* Clean popover */
+    --popover: 220 20% 99%;
+    --popover-foreground: 220 15% 9%;
+
     --radius: 0.75rem;
-    
-    /* Animation durations */
     --duration-fast: 150ms;
     --duration-normal: 250ms;
     --duration-slow: 350ms;
   }
 
   .dark {
-    /* Dark mode - reversed palette */
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
-    
-    --muted: 0 0% 8%;
-    --muted-foreground: 0 0% 60%;
-    
-    --card: 0 0% 0%;
-    --card-foreground: 0 0% 100%;
-    
-    --border: 0 0% 15%;
-    --input: 0 0% 8%;
-    --ring: 0 0% 100%;
-    
-    --primary: 0 0% 100%;
-    --primary-foreground: 0 0% 0%;
-    
-    --secondary: 0 0% 8%;
-    --secondary-foreground: 0 0% 100%;
-    
-    --accent: 0 0% 12%;
-    --accent-foreground: 0 0% 100%;
-    
-    --destructive: 0 65% 50%;
-    --destructive-foreground: 0 0% 100%;
-    
-    --popover: 0 0% 0%;
-    --popover-foreground: 0 0% 100%;
-  }
-}
+    /* Sophisticated dark mode */
+    --background: 220 15% 7%;
+    --foreground: 220 20% 95%;
 
-@layer base {
+    /* Elegant dark muted */
+    --muted: 220 15% 12%;
+    --muted-foreground: 220 10% 65%;
+
+    /* Rich dark cards */
+    --card: 220 15% 9%;
+    --card-foreground: 220 20% 95%;
+
+    /* Refined dark borders */
+    --border: 220 15% 18%;
+    --input: 220 15% 11%;
+    --ring: 220 70% 60%;
+
+    /* Brighter primary for dark mode */
+    --primary: 220 70% 65%;
+    --primary-foreground: 220 15% 7%;
+
+    /* Clean dark secondary */
+    --secondary: 220 15% 12%;
+    --secondary-foreground: 220 20% 95%;
+
+    /* Subtle dark accent */
+    --accent: 220 15% 15%;
+    --accent-foreground: 220 20% 90%;
+
+    /* Balanced destructive */
+    --destructive: 0 70% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Dark popover */
+    --popover: 220 15% 9%;
+    --popover-foreground: 220 20% 95%;
+  }
+
   * {
     @apply border-border;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   body {
     @apply bg-background text-foreground font-inter antialiased;
     font-feature-settings: "cv11", "ss01";
     font-variation-settings: "opsz" 32;
+    letter-spacing: -0.01em;
   }
 }
 
 @layer components {
-  /* Smooth animations for minimalistic feel */
   .animate-fade-in {
-    animation: fadeIn var(--duration-normal) ease-out;
+    animation: fade-in var(--duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   .animate-slide-up {
-    animation: slideUp var(--duration-normal) ease-out;
+    animation: slide-up var(--duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   .animate-scale-in {
-    animation: scaleIn var(--duration-fast) ease-out;
+    animation: scale-in var(--duration-fast) cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
-  /* Hover effects */
+
   .hover-lift {
-    @apply transition-transform duration-200 hover:translate-y-[-2px];
+    @apply transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg;
   }
-  
+
   .hover-glow {
-    @apply transition-shadow duration-200 hover:shadow-lg;
+    @apply transition-all duration-300 hover:shadow-xl hover:shadow-primary/10;
   }
-  
-  /* Glass morphism effects for cards */
+
+  /* Enhanced glass card for minimalistic design */
   .glass-card {
-    @apply backdrop-blur-sm bg-card/90 border border-border/50;
+    @apply backdrop-blur-xl bg-card/60 border border-border/30 shadow-lg;
+    background: linear-gradient(
+      135deg, 
+      hsl(var(--card) / 0.7) 0%, 
+      hsl(var(--card) / 0.4) 100%
+    );
+  }
+
+  /* Minimalistic button styles */
+  .btn-minimal {
+    @apply bg-transparent hover:bg-muted/50 text-foreground border border-border/50 
+           hover:border-border transition-all duration-200 rounded-xl px-4 py-2;
+  }
+
+  /* Clean input styling */
+  .input-minimal {
+    @apply bg-background/50 border border-border/50 focus:border-primary/50 
+           rounded-xl px-4 py-3 backdrop-blur-sm transition-all duration-200;
   }
 }
 
 @layer utilities {
-  /* Custom keyframes */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
   }
-  
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
   }
-  
-  @keyframes scaleIn {
-    from {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
+
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
   }
-  
-  /* Loading animation */
+
   @keyframes pulse-subtle {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
   }
-  
+
   .animate-pulse-subtle {
-    animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation: pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
+
+  @keyframes gradient-minimal {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .animate-gradient-minimal {
+    background: linear-gradient(-45deg, 
+      hsl(var(--muted)), 
+      hsl(var(--accent)), 
+      hsl(var(--muted)), 
+      hsl(var(--secondary))
+    );
+    background-size: 400% 400%;
+    animation: gradient-minimal 8s ease infinite;
+  }
+}
+
+/* Enhanced backdrop blur for better glass effect */
+.backdrop-blur-xl {
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+}
+
+.backdrop-blur-3xl {
+  backdrop-filter: blur(48px) saturate(180%);
+  -webkit-backdrop-filter: blur(48px) saturate(180%);
+}
+
+/* Refined shadows for minimalistic design */
+.shadow-lg {
+  box-shadow: 
+    0 4px 24px -6px hsl(var(--foreground) / 0.08),
+    0 0 0 1px hsl(var(--border) / 0.3) inset;
+}
+
+.shadow-xl {
+  box-shadow: 
+    0 8px 40px -8px hsl(var(--foreground) / 0.12),
+    0 0 0 1px hsl(var(--border) / 0.4) inset;
+}
+
+.dark .shadow-lg {
+  box-shadow: 
+    0 4px 24px -6px hsl(0 0% 0% / 0.4),
+    0 0 0 1px hsl(var(--border) / 0.2) inset;
+}
+
+.dark .shadow-xl {
+  box-shadow: 
+    0 8px 40px -8px hsl(0 0% 0% / 0.5),
+    0 0 0 1px hsl(var(--border) / 0.3) inset;
+}
+
+/* Focus states for accessibility */
+.group:focus-within .text-muted-foreground {
+  color: hsl(var(--primary));
+  transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Minimalistic scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* Text selection */
+::selection {
+  background: hsl(var(--primary) / 0.2);
+  color: hsl(var(--primary-foreground));
 }
