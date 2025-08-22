@@ -1,10 +1,12 @@
 {
   "dependencies": {
     "axios": "^1.10.0",
+    "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^5.1.0",
-    "mongoose": "^8.16.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.17.2",
     "prisma": "^6.11.0"
   },
   "name": "server",
@@ -12,7 +14,7 @@
   "main": "test.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon test.js"
+    "dev": "nodemon app.js"
   },
   "keywords": [],
   "author": "",

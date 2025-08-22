@@ -103,11 +103,6 @@ const LandingPage = () => {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              <Button variant="outline" size="lg" asChild className="border-border hover:bg-muted/50 px-12 py-6 h-14 text-lg rounded-2xl transition-all duration-300 hover:scale-105">
-                <Link to="/Login">
-                  Login
-                </Link>
-              </Button>
             </div>
             <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 animate-fade-in" style={{ animationDelay: '700ms' }}>
               {stats.map(({ icon: Icon, value, label }) => (
