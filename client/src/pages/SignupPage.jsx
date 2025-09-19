@@ -48,7 +48,6 @@ const SignupPage = () => {
     }
   }, []);
 
-  // Password strength calculation
   useEffect(() => {
     const calculateStrength = (password) => {
       let strength = 0;
@@ -61,23 +60,43 @@ const SignupPage = () => {
     };
     setPasswordStrength(calculateStrength(formData.password));
   }, [formData.password]);
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords don't match!");
       return;
     }
-    
+  
     setIsLoading(true);
+  
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password
+        })
+      });
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    console.log("Signup attempt:", formData);
+      const data = await res.json();
+      if (res.ok) {
+        console.log("Signup successful:", data);
+        navigate("/search");
+      } else {
+        alert(data.message || "Signup failed");
+      }
+    } catch (err) {
+      console.error("Error signing up:", err);
+      alert("Something went wrong");
+    }
+  
     setIsLoading(false);
-    navigate("/search");
   };
+
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
